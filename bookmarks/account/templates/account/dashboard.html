@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %} Dashboard {% endblock %}
+
+{% block content %}
+    <h1>Dashboard</h1>
+    
+    <div class="dashboard-grid">
+        
+        <aside class="dashboard-sidebar">
+            <div class="card">
+                <h3>Stats</h3>
+                {% with total_images_created=request.user.images_created.count %}
+                    <p>
+                        You have bookmarked <strong style="color: var(--primary);">{{ total_images_created }}</strong> 
+                        image{{ total_images_created|pluralize }}.
+                    </p>
+                {% endwith %}
+            </div>
+
+            <div class="card">
+                <h3>Bookmarklet</h3>
+                <p class="helptext" style="margin-bottom: 1rem;">
+                    Drag the button below to your bookmarks toolbar to save images from other sites:
+                </p>
+                <a href="javascript:{% include "images/bookmarklet_launcher.js" %}" class="btn-bookmarklet">
+                    🔖 Bookmark it
+                </a>
+            </div>
+
+            <div class="card">
+                <h3>Account</h3>
+                <ul class="settings-list">
+                    <li>
+                        <a href="{% url 'edit' %}">Edit your profile</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'password_change' %}">Change password</a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <section class="dashboard-feed">
+            <div class="feed-header">
+                <h2>What's happening</h2>
+
+                <div class="rank-controls" aria-label="Re-ranking controls">
+                    <span class="rank-label">Sort:</span>
+
+                    <a href="?order=recent"
+                       class="rank-btn {% if request.GET.order == 'recent' or not request.GET.order %}active{% endif %}">
+                        Recent
+                    </a>
+
+                    {# Popular = Most viewed images page #}
+                    <a href="{% url 'images:ranking' %}" class="rank-btn">
+                        Popular
+                    </a>
+
+                    <a href="?order=following"
+                       class="rank-btn {% if request.GET.order == 'following' %}active{% endif %}">
+                        Following
+                    </a>
+                </div>
+            </div>
+
+            <div id="action-list">
+                {% for action in actions %}
+                    {% include "actions/action/detail.html" %}
+                {% empty %}
+                    <div class="card" style="text-align:center; padding: 2rem; color: var(--text-light);">
+                        No activity yet.
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} {% extends "base.html" %}
+{% block title %} Dashboard {% endblock %}
+
+{% block content %}
+    <h1>Dashboard</h1>
+    {% with total_images_created=request.user.images_created.count %}
+        <p>Welcome to your dashboard.
+            You have bookmarked {{ total_images_created }} image{{total_images_created|pluralize }}
+        </p>
+    {% endwith %}
+        <p>
+            Drag the following button in your bookmarks toolbar to bookmarkimages from the other website 
+            → <a href="javascript: {% include "images/bookmarklet_launcher.js" %}" class="button">
+                Bookmark it
+            </a>
+        </p>
+        <p>
+            You can also <a href="{% url 'edit' %}" > edit your profile </a> or
+            <a href="{% url 'password_change' %}"> change your password</a>
+        </p>
+        <h2>What's happening</h2>
+        <div id="action-list">
+            {% for action in actions %}
+                {% include "actions/action/detail.html" %}            
+            {% endfor %}
+        </div>        
+{% endblock  %} {% endcomment %}

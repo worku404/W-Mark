@@ -1,0 +1,69 @@
+{% extends "registration/reg_base.html" %}
+
+{% block title %}Create an account{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-card">
+        
+        <div class="login-header">
+            <h2>Create Account</h2>
+            <p>Please, sign up using the following form</p>
+        </div>
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+            
+            {% for field in user_form %}
+            <div class="form-group {% if field.errors %}error{% endif %}">
+                <div class="input-wrapper">
+                    {{ field }}
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    <span class="focus-border"></span>
+                </div>
+                
+                {% if field.help_text %}
+                <small style="color: rgba(255,255,255,0.5); font-size: 12px; display: block; margin-top: 4px;">
+                    {{ field.help_text|safe }}
+                </small>
+                {% endif %}
+
+                {% if field.errors %}
+                <span class="error-message show">{{ field.errors.0 }}</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn login-btn">
+                <span class="btn-text">Create my account</span>
+                <div class="btn-loader"></div>
+            </button>
+        </form>
+
+        <div class="signup-link">
+            <p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+{% comment %}
+ {% extends "base.html" %}
+{% block title %}Create an account{% endblock  %}
+{% block content %}
+    <h1>Create an account</h1>
+    <p>Please, sign up using the following form:</p>
+    <form method="post">
+        {{ user_form.as_p }}
+        {% csrf_token %}
+        <p><input type="submit" value="Create my account"></p>
+    </form>
+{% endblock  %} {% endcomment %}

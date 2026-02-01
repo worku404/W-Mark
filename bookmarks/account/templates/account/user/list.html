@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load thumbnail static %}
+{% block title %}People{% endblock  %}
+{% block content %}
+    <h1>People</h1>
+    <div id="people-list">
+        {% for user in users %}
+            <div class="user">
+                {% if user.profile.photo %}
+                    <a href="{{ user.get_absolute_url }}">
+                        {% thumbnail user.profile.photo 180x180 crop="center" as im %}
+                            <img src="{{ im.url }}" alt="{{ user.get_full_name }}">
+                    </a>
+                    {% else %}
+                       <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="32" cy="32" r="32" fill="#E0E0E0"/>
+                        <circle cx="32" cy="24" r="10" fill="#BDBDBD"/>
+                        <path d="M16 52c0-8.837 7.163-16 16-16s16 7.163 16 16" fill="#BDBDBD"/>
+                        </svg>
+
+                    {% endif %}
+                <div class="info">
+                    <a href="{{ user.get_absolute_url }}" class="title">
+                        {% if user.get_full_name %}
+                            {{ user.get_full_name|title }}
+                        {% else %}
+                            {{ user.username }}
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock  %} 
+
+
+
+
+{% comment %} {% extends "base.html" %}
+{% load thumbnail %}
+
+{% block title %}People{% endblock %}
+
+{% block content %}
+    <h1>People</h1>
+    
+    <div id="people-list">
+        {% for user in users %}
+            <div class="user">
+                <a href="{{ user.get_absolute_url }}">
+                    {% thumbnail user.profile.photo 180x180 crop="center" as im %}
+                        <img src="{{ im.url }}" alt="{{ user.get_full_name }}">
+                    {% empty %}
+                        <img src="https://ui-avatars.com/api/?name={{ user.username }}&background=random" alt="No Image">
+                    {% endthumbnail %}
+                </a>
+                
+                <div class="info">
+                    <a href="{{ user.get_absolute_url }}" class="title">
+                        {% if user.get_full_name %}
+                            {{ user.get_full_name }}
+                        {% else %}
+                            {{ user.username }}
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %} {% endcomment %}
+
+
+
+
+
+

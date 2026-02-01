@@ -1,0 +1,39 @@
+<!-- filepath: c:\Users\hi\Downloads\webdev\DjangoWithPaulo\gold_social\bookmarks\images\templates\images\image\ranking.html -->
+{% extends "base.html" %}
+{% block title %} Images ranking {% endblock %}
+
+{% block content %}
+<div class="feed-header">
+    <h2 class="feed-title">Images ranking</h2>
+
+    <div class="rank-controls" aria-label="Re-ranking controls">
+        <span class="rank-label">Sort:</span>
+
+        <a href="{% url 'dashboard' %}?order=recent" class="rank-btn">
+            Recent
+        </a>
+        <a href="{% url 'images:ranking' %}" class="rank-btn active">
+            Popular
+        </a>
+        <a href="{% url 'dashboard' %}?order=following" class="rank-btn">
+            Following
+        </a>
+    </div>
+</div>
+
+<ol class="ranking-list ranking-glass">
+    {% for image in most_viewed %}
+        <li class="ranking-item">
+            <span class="ranking-pos">{{ forloop.counter }}</span>
+
+            <a class="ranking-title" href="{{ image.get_absolute_url }}">
+                {{ image.title }}
+            </a>
+        </li>
+    {% empty %}
+        <li class="ranking-item">
+            <span class="ranking-title">No ranked images yet.</span>
+        </li>
+    {% endfor %}
+</ol>
+{% endblock %}

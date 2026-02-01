@@ -1,0 +1,879 @@
+/* =========================================
+   1. VARIABLES & RESET
+   ========================================= */
+:root {
+    /* --- COLOR PALETTE: Modern SaaS Theme --- */
+    
+    /* Primary: Electric Indigo Gradient */
+    --primary: #6366f1;
+    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --primary-hover: #4f46e5;
+    
+    /* Accent: Gold/Amber Gradient for special actions */
+    --accent: #f59e0b;
+    --accent-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+
+    /* Backgrounds */
+    --bg-body: #0b1220;     /* deep navy */
+    --bg-header: rgba(15, 23, 42, 0.55); 
+    --bg-card: #EEEEEE;       /* Pure white for cards to pop */
+
+
+    /* Typography colors (Softer than pure black) */
+    --text-main: #1e293b;     /* Slate 800 */
+    --text-muted: #64748b;    /* Slate 500 */
+    --text-light: #94a3b8;    /* Slate 400 */
+
+    /* Modern Borders & Shadows (No hard lines) */
+    --border-color: #e2e8f0;  
+    --radius: 12px;           /* Softer, rounder corners */
+    
+    /* The "Floating" Shadow Effect */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* Status Colors */
+    --success-bg: #dcfce7; --success-text: #166534;
+    --error-bg: #fee2e2;   --error-text: #991b1b;
+    --warning-bg: #fef3c7; --warning-text: #92400e;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    /* Subtle top gradient to add depth to the page */
+    background-image:
+        radial-gradient(900px 500px at 20% 10%, rgba(99, 102, 241, 0.18), transparent 60%),
+        radial-gradient(900px 500px at 80% 0%, rgba(245, 158, 11, 0.12), transparent 55%),
+        radial-gradient(900px 600px at 50% 100%, rgba(14, 165, 233, 0.10), transparent 60%),
+        linear-gradient(180deg, #0b1220 0%, #070b12 100%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    color: var(--accent-gradient);
+}
+p{
+    color: rgba(255, 255, 255, 0.72);
+}
+.liker-name{
+    color: rgba(255, 255, 255, 0.72);
+}
+h1, h2, h3, h4, h5, h6 {
+    color:  rgba(255, 255, 255, 0.75);
+    font-weight: 700;
+    margin-top: 0;
+    letter-spacing: -0.025em; /* Tighter, modern heading spacing */
+}
+
+h1 {
+    font-size: 2rem;
+    border-bottom: 2px solid var(--border-color); /* Thicker separator */
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* =========================================
+   2. HEADER & NAVIGATION (Glassmorphism)
+   ========================================= */
+/* Header Base Styling */
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: var(--bg-header);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0 20px;
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Logo Styling */
+.logo {
+    text-decoration: none;
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.02);
+}
+
+.logo-icon {
+    color: #06b6d4;
+    font-size: 1.5rem;
+}
+
+/* Navigation Menu */
+.main-nav .menu {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+.main-nav .menu li a {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 8px 0;
+    position: relative;
+}
+
+.main-nav .menu li a:hover,
+.main-nav .menu li.selected a {
+    color: white;
+}
+
+/* Active State Underline */
+.main-nav .menu li a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #06b6d4;
+    transition: width 0.3s ease;
+}
+
+.main-nav .menu li.selected a::after,
+.main-nav .menu li a:hover::after {
+    width: 100%;
+}
+.main-nav .menu li a,
+.welcome-msg,
+.logo {
+    color: rgba(255, 255, 255, 0.88);
+}
+/* User Actions & Logout */
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.welcome-msg {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+}
+
+.logout-form {
+    margin: 0;
+}
+
+.btn-logout, .btn-login{
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 18px;
+    border-radius: 8px;
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-logout:hover {
+    background: rgba(239, 68, 68, 0.2); /* Subtle red for logout */
+    border-color: #ef4444;
+}
+
+.btn-login:hover {
+    background: rgba(6, 182, 212, 0.2);
+    border-color: #06b6d4;
+}
+
+/* Fix for Body Content to avoid being hidden under fixed header */
+body {
+    padding-top: 80px; /* Adjust based on header height */
+}
+
+/* Mobile Responsive Header */
+@media (max-width: 768px) {
+    .header-container {
+        height: auto;
+        padding: 15px 0;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .main-nav .menu {
+        gap: 15px;
+    }
+    body {
+        padding-top: 140px;
+    }
+}
+
+/* ...existing code... */
+
+/* Dashboard feed header + ranking buttons */
+.feed-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.feed-header h2 {
+    margin: 0;
+}
+
+.rank-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.rank-label {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.rank-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-main);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.rank-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(99, 102, 241, 0.35);
+}
+
+.rank-btn.active {
+    background: var(--primary-gradient);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 6px 14px rgba(99, 102, 241, 0.25);
+}
+/* ...existing code... */
+
+/* Images ranking page list */
+/* ...existing code... */
+
+/* Feed header title (ranking page uses h2.feed-title) */
+.feed-title {
+    margin: 0;
+    font-weight: 800;
+}
+
+/* Images ranking page list (match glass cards) */
+.ranking-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.25rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.ranking-item {
+    /* match dashboard feed glass */
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    padding: 1.1rem 1.25rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.ranking-item:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(99, 102, 241, 0.25);
+}
+
+.ranking-pos {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 999px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 800;
+    color: white;
+    background: var(--primary-gradient);
+    flex: 0 0 auto;
+}
+
+.ranking-title {
+    font-weight: 750;
+    color: rgba(255, 255, 255, 0.88);
+    text-decoration: none;
+}
+
+.ranking-title:hover {
+    color: var(--accent);
+}
+
+
+
+
+/* Mobile: stack nicely */
+@media (max-width: 768px) {
+    .feed-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+/* =========================================
+   3. LAYOUT & CONTENT
+   ========================================= */
+#content {
+    max-width: var(--container-width);
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+    min-height: 80vh;
+}
+
+/* =========================================
+   4. FORMS (Modern Inputs)
+   ========================================= */
+form p { margin-bottom: 1.25rem; }
+
+label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-main);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea,
+select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    background-color: #fff; /* Crisp white inputs */
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15); /* Soft glow ring */
+}
+
+/* Modern Gradient Button */
+input[type="submit"], button.submit-btn {
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    margin-top: 15px;
+    box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3); /* Colored shadow */
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(99, 102, 241, 0.4);
+}
+
+.helptext {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.4rem;
+}
+
+.errorlist {
+    color: var(--error-text);
+    background: var(--error-bg);
+    border-radius: var(--radius);
+    padding: 0.5rem 1rem;
+    list-style: none;
+    font-size: 0.9rem;
+}
+
+/* =========================================
+   5. MESSAGES & ALERTS
+   ========================================= */
+.messages-container {
+    max-width: var(--container-width);
+    margin: 1.5rem auto 0;
+    padding: 0 1.5rem;
+}
+
+ul.messages { list-style: none; padding: 0; margin: 0; }
+
+ul.messages li {
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-md);
+    font-weight: 500;
+}
+
+ul.messages li.success { background: var(--success-bg); color: var(--success-text); border-left: 5px solid #166534; }
+ul.messages li.error { background: var(--error-bg); color: var(--error-text); border-left: 5px solid #991b1b; }
+ul.messages li.warning { background: var(--warning-bg); color: var(--warning-text); border-left: 5px solid #92400e; }
+ul.messages li.info { background: #eff6ff; color: #1e40af; border-left: 5px solid #1e40af; }
+
+.close-msg {
+    font-size: 1.5rem;
+    line-height: 0.5;
+    cursor: pointer;
+    opacity: 0.6;
+}
+.close-msg:hover { opacity: 1; }
+
+/* =========================================
+   6. IMAGE LIST (Cards with Depth)
+   ========================================= */
+#image-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); /* Slightly wider cards */
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+#image-list .image {
+    background: var(--bg-card);
+    border: none; /* Removed border */
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    /* The modern lift effect */
+    box-shadow: var(--shadow-md); 
+    transition: all 0.3s ease;
+}
+
+#image-list .image:hover {
+    transform: translateY(-8px); /* Higher lift */
+    box-shadow: var(--shadow-lg);
+}
+
+#image-list .image a img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+}
+
+#image-list .info {
+    padding: 1.25rem;
+}
+
+#image-list .info .title {
+    font-weight: 700;
+    color: var(--text-main);
+    font-size: 1.1rem;
+    text-decoration: none;
+}
+#image-list .info .title:hover {
+    color: var(--primary);
+}
+
+/* =========================================
+   7. PEOPLE / USERS LIST
+   ========================================= */
+#people-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 2rem;
+}
+
+#people-list .user {
+    background: var(--bg-card);
+    padding: 2rem;
+    border-radius: var(--radius);
+    text-align: center;
+    border: none;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+    position: relative;
+    top: 0;
+}
+
+#people-list .user:hover {
+    top: -5px;
+    box-shadow: var(--shadow-lg);
+}
+
+#people-list img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    border: 4px solid var(--bg-body); /* Creates a 'cutout' effect */
+    box-shadow: var(--shadow-sm);
+}
+
+#people-list .info a.title {
+    display: block;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-main);
+    margin-bottom: 0.25rem;
+}
+
+/* Follow Button */
+
+.follow, .like-btn {
+    /* display: block; */
+    background: var(--accent-gradient);
+    text-align: center;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
+    border: 1px dashed rgba(255, 255, 255, 0.5);
+    padding: 8px 18px;
+    border-radius: 8px;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.follow:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 15px rgba(245, 158, 11, 0.4);
+    color: white;
+}
+.like-btn:hover{
+    transform: scale(1.03);
+    box-shadow: 0 6px 15px rgba(245, 158, 11, 0.4);
+    color: white;
+}
+
+/* =========================================
+   8. IMAGE DETAIL PAGE
+   ========================================= */
+.image-detail-container {
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+    background: var(--bg-card);
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+}
+
+.image-preview { flex: 1 1 450px; }
+.image-preview img {
+    width: 100%;
+    border-radius: var(--radius);
+}
+
+.image-info { flex: 1 1 300px; }
+
+.count {
+    display: inline-block;
+    background: var(--primary-hover);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+/* ...existing code... */
+
+/* Likes list: keep spacing between names, overlap only the avatars */
+.image-likes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;              /* real spacing between user blocks (names included) */
+    align-items: flex-start;
+}
+
+.image-likes .liker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 70px;
+}
+
+.image-likes .liker img {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+}
+
+/* Overlap ONLY the avatar image (not the whole block) */
+.image-likes .liker:not(:first-child) img {
+    margin-left: -12px;
+}
+
+.image-likes .liker-name {
+    margin: 8px 0 0;
+    font-size: 14px;
+    color: var(--text-main);
+    white-space: nowrap;
+}
+/* ...existing code... */
+/* =========================================
+   9. MOBILE RESPONSIVENESS
+   ========================================= */
+@media (max-width: 768px) {
+    .header-container {
+        height: auto;
+        flex-direction: column;
+        padding: 1rem 0;
+        gap: 0.5rem;
+    }
+    .main-nav .menu { gap: 1.5rem; font-size: 0.9rem; }
+    .main-nav .menu li.selected a::after { bottom: 0px; }
+    .user-actions { 
+        width: 100%; 
+        justify-content: center; 
+        background: transparent; 
+        padding-top: 10px;
+    }
+    .image-detail-container { padding: 1rem; }
+}
+
+/* =========================================
+   10. DASHBOARD (Control Center Look)
+   ========================================= */
+.dashboard-grid {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.dashboard-sidebar {
+    flex: 1;
+    min-width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.dashboard-feed { flex: 2; }
+
+/* Dashboard Cards - Clean White on Slate Background */
+
+.dashboard-sidebar .card {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    padding: 1.5rem;
+
+
+
+}
+.dashboard-sidebar .card h3 {
+    color: rgba(255, 255, 255, 0.75);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    text-transform: uppercase;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+
+}
+.dashboard-sidebar p,
+.dashboard-sidebar .helptext {
+    color: rgba(255, 255, 255, 0.72);
+}
+
+/* Sidebar settings links: match glass style */
+.dashboard-sidebar .settings-list li a {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.dashboard-sidebar .settings-list li a:hover {
+    background: rgba(99, 102, 241, 0.20);
+    border-color: rgba(99, 102, 241, 0.35);
+    color: #fff;
+}
+/* Bookmarklet Button - Gold Gradient */
+.btn-bookmarklet {
+    display: block;
+    background: var(--accent-gradient);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    border-radius: var(--radius);
+    font-weight: 700;
+    cursor: move;
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
+    border: 2px dashed rgba(255, 255, 255, 0.5);
+    transition: all 0.2s;
+}
+
+.btn-bookmarklet:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 15px rgba(245, 158, 11, 0.4);
+    color: white;
+}
+
+/* Settings List */
+.settings-list { list-style: none; padding: 0; margin: 0; }
+.settings-list li { margin-bottom: 0.5rem; }
+.settings-list li a {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    color: var(--text-main);
+    background: var(--bg-body); /* Slight offset bg */
+    font-weight: 500;
+    transition: background 0.2s;
+}
+.settings-list li a:hover {
+    background: var(--primary);
+    color: white;
+}
+
+
+/* =========================================
+   11. ACTION STREAM (match glass sidebar)
+   ========================================= */
+#action-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#action-list > div,
+.action-item {
+    /* Glass look like sidebar */
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    padding: 1.25rem;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+#action-list > div:hover,
+.action-item:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(99, 102, 241, 0.25);
+}
+
+#action-list img {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Text colors inside glass cards */
+#action-list .info {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.88);
+}
+
+#action-list .info a {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+#action-list .info a:hover {
+    color: #ffd08a; /* lighter amber on hover */
+}
+
+#action-list .info .date {
+    display: block;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.55);
+    font-weight: 600;
+    margin-top: 0.3rem;
+}
+
+/* ...existing code... */
+
+@media (max-width: 900px) {
+    .dashboard-grid { flex-direction: column; }
+    .dashboard-sidebar, .dashboard-feed { width: 100%; }
+}

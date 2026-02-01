@@ -1,0 +1,72 @@
+{% extends "registration/reg_base.html" %}
+{% comment %} {% extends "base.html" %} {% endcomment %}
+{% comment %} 
+errroorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr connect it with base.html
+{% endcomment %}
+{% block title %}Edit your account{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-card">
+        
+        <div class="login-header">
+            <h2>Edit Profile</h2>
+            <p>Update your account details, {{ request.user.username }}</p>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            
+            <h3 style="color: rgba(255,255,255,0.6); font-size: 14px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">Account Info</h3>
+            {% for field in user_form %}
+            <div class="form-group {% if field.errors %}error{% endif %}">
+                <div class="input-wrapper">
+                    {{ field }}
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    <span class="focus-border"></span>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="divider"><span>Profile Details</span></div>
+
+            {% for field in profile_form %}
+            <div class="form-group {% if field.errors %}error{% endif %}">
+                <div class="input-wrapper">
+                    {{ field }}
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    <span class="focus-border"></span>
+                </div>
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn login-btn">
+                <span class="btn-text">Save Changes</span>
+                <div class="btn-loader"></div>
+            </button>
+        </form>
+
+        <div class="signup-link" style="margin-top: 20px;">
+            <p><a href="{% url 'password_change' %}">Change Password?</a></p>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+{% comment %} {% block title %}Edit your account{% endblock  %}
+{% block content %}
+    <h1>Edit your account {{new_user.username}} !</h1>
+    <p>
+        you can edit your account using the following form
+    </p>
+    <form method="post" enctype="multipart/form-data">
+        {{ user_form.as_p }}
+        {{ profile_form.as_p }}
+        {% csrf_token %}
+        <p><input type="submit" value="Save changes"></p>
+    </form>
+{% endblock  %}  {% endcomment %}

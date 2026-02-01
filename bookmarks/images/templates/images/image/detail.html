@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %} {{ image.title }} {% endblock %}
+
+{% block content %}
+    <h1>{{ image.title }}</h1>
+     {% load thumbnail %}
+     <a href="{{ image.image.url }}">
+        <img src="{% thumbnail image.image 300x0 %}" alt="Image detail" class="image-detail">
+     </a>
+    {% with total_likes=image.user_like.count likers=image.user_like.all %}
+        <div class="image-info">
+            <div>
+                <span class="count">
+                    <span class="total">{{ total_likes }}</span> 
+                    like{{total_likes|pluralize}}
+                </span>
+                <span class="count">
+                    {{ total_views }} view{{ total_views|pluralize }}
+                </span>
+                <a href="#"
+                    data-id="{{ image.id }}" 
+                    data-action="{% if request.user in likers %}un{% endif %}like" 
+                    class="like button like-btn">
+                    {% if request.user not in likers %}
+                        Like
+                    {% else %}
+                        Unlike
+                    {% endif %}
+                </a>
+            </div>
+        {{ image.description|linebreaks}}
+        </div>
+        <div class="image-likes">
+            {% for user in image.user_like.all %}
+                <div class="liker">
+                    {% if user.profile.photo %}
+                        <img src="{{ user.profile.photo.url }}" alt="profile photo">
+                    {% endif %}
+                    <p class="liker-name" style="color:rgba(255, 255, 255, 0.72);"> {% if user.first_name %} {{ user.first_name }} {% else %} {{ user.username }} {% endif %}</p>
+                </div>
+            {% empty %}
+                <p>Nobody likes this image yet.</p>
+            {% endfor %}
+        </div>
+    {% endwith %}
+{% endblock %}
+{% block domready %}
+    const url = '{% url "images:like" %}';
+    var options = {
+        method: 'POST',
+        headers: {'X-CSRFToken': csrftoken},
+        mode: 'same-origin'
+    }
+    document.querySelector('a.like')
+            .addEventListener('click', function(e){
+        e.preventDefault();
+        var likeButton = this;
+        //add request body
+        var formData = new FormData();
+        formData.append('id', likeButton.dataset.id);
+        formData.append('action', likeButton.dataset.action);
+        options['body'] = formData;
+
+        // send HTTP request
+        fetch(url, options)
+        .then(response => response.json())
+        .then(data => {
+            if (data['status'] === 'ok')
+            {
+                var previousAction = likeButton.dataset.action;
+                // toggle button text and data-action
+                var action = previousAction === 'like' ? 'unlike' : 'like';
+                likeButton.dataset.action = action;
+                likeButton.innerHTML = action;
+                //update like count
+                var likeCount = document.querySelector('span.total');
+                var totalLikes = parseInt(likeCount.innerHTML);
+                likeCount.innerHTML = previousAction === 'like' ? totalLikes + 1: totalLikes -1;
+            }
+        })
+    });
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "registration/reg_base.html" %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-card">
+        
+        <div class="success-message" style="display: block; opacity: 1; transform: translateY(0);">
+            <div class="success-icon">✓</div>
+            <h3>Welcome {{ new_user.username }}!</h3>
+            <p>Your account has been successfully created.</p>
+        </div>
+
+        <div class="btn login-btn" style="text-align: center; margin-top: 20px; padding: 0;">
+             <a href="{% url 'login' %}" style="display: block; padding: 16px 24px; color: white; text-decoration: none; width: 100%; height: 100%;">
+                Log in Now
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% comment %} {% extends "base.html" %}
+{% block title %}Wellcome{% endblock  %}
+{% block content %}
+    <h1>Wellcome {{new_user.username}} !</h1>
+    <p>Your account has been successfully created.
+        now you can <a href='{% url 'login' %}'>log in </a>
+    </p>
+{% endblock  %} {% endcomment %}

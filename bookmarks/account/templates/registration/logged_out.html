@@ -1,0 +1,46 @@
+{% extends "registration/reg_base.html" %}
+
+{% block title %}Logged out{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-card">
+        
+        <div class="success-message" style="display: block; opacity: 1; transform: translateY(0);">
+            <div class="success-icon" style="background: rgba(255, 255, 255, 0.2);">
+                👋
+            </div>
+            
+            <div class="login-header">
+                <h2>Logged Out</h2>
+                <p>You have been successfully logged out. We hope to see you again soon!</p>
+            </div>
+        </div>
+
+        <div class="divider">
+            <span>OR</span>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="{% url 'login' %}" class="btn login-btn" style="display: block; text-decoration: none; text-align: center;">
+                <span class="btn-text">Log-in again</span>
+            </a>
+        </div>
+
+        <div class="signup-link" style="margin-top: 24px;">
+            <p>Need to go home? <a href="/">Return to Homepage</a></p>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% comment %} {% extends "base.html" %}
+{% block title %}Logged out{% endblock  %}
+{% block content %}
+    <h1>Logged out</h1>
+    <p>
+        You have been successfully logged out.
+        you can <a href="{% url 'login' %}"> Log-in again</a>
+    </p>
+{% endblock  %} {% endcomment %}

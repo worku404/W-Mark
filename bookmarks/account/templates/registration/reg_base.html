@@ -1,0 +1,274 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Gold Bookmarks{% endblock %}</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link href="{% static "css/base.css" %}" rel="stylesheet">
+</head>
+<body>
+
+    {% block header %}
+    <header class="main-header">
+        <div class="header-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">✦</span> Gold Bookmarks
+            </a>
+            
+            {% if request.user.is_authenticated %}
+                <nav class="main-nav">
+                    <ul class="menu">
+                        <li class="{% if section == 'dashboard' %}selected{% endif %}">
+                            <a href="{% url 'dashboard' %}">Dashboard</a>
+                        </li>
+                        <li class="{% if section == 'images' %}selected{% endif %}">
+                            <a href="{% url 'images:list' %}">Images</a>
+                        </li>
+                        <li class="{% if section == 'people' %}selected{% endif %}">
+                            <a href="{% url 'user_list' %}">People</a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="user-actions">
+                    <span class="welcome-msg">
+                        Hi, {{ request.user.first_name|default:request.user.username }}
+                    </span>
+                    <form action="{% url 'logout' %}" method="post" class="logout-form">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-logout">Logout</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="auth-links">
+                    <a href="{% url 'login' %}" class="btn-login">Log In</a>
+                </div>
+            {% endif %}
+        </div>
+    </header>
+    {% endblock %}
+
+    {% if messages %}
+        <div class="messages-container">
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">
+                        {{ message|safe }}
+                        <a href="#" class="close-msg">&times;</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <main id="content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script>
+        const csrftoken = Cookies.get('csrftoken');
+        
+        // Message close logic
+        document.addEventListener('DOMContentLoaded', function(){
+            const closeButtons = document.querySelectorAll('.close-msg');
+            closeButtons.forEach(function(btn){
+                btn.addEventListener('click', function(e){
+                    e.preventDefault();
+                    // Fade out effect
+                    const item = btn.parentElement;
+                    item.style.opacity = '0';
+                    setTimeout(() => {
+                        item.style.display = 'none';
+                    }, 300);
+                });
+            });
+
+            // Specific page DOM logic
+            {% block domready %}{% endblock %}
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport">
+        <title> {% block title %}{% endblock %}</title>
+        <link href="{% static "css/base.css" %}" rel = "stylesheet">
+    </head>
+
+    <body>
+        {% block header %}
+        <div id="header">
+            <span class="logo">Gold Bookmarks</span>
+            {% if request.user.is_authenticated %}
+                <ul class="menu">
+                    <li {% if section == 'dashboard' %}
+                            class="selected"
+                        {% endif %}>
+                        <a href="{% url 'dashboard' %}"> My dashboard</a>
+                    </li>
+
+                    <li {% if section == 'images' %}
+                            class="selected"
+                        {% endif %}>
+                        <a href="{% url 'images:list' %}">Images</a>
+                    </li>
+
+                    <li {% if section == "people" %}
+                            class="selected"
+                        {% endif %}>
+                        <a href="{% url 'user_list' %}">People</a>
+                    </li>
+                </ul>
+           {% endif %}
+            <span class="user">
+                {% if request.user.is_authenticated %}
+                    Hello 
+                    {{ request.user.first_name|default:request.user.username }},
+
+                    <form action="{% url 'logout' %}" method="post">
+                        <button type="submit">Logout</button>
+                        {% csrf_token %}
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}">Log-in</a>
+                {% endif %}
+            </span>
+        </div>
+        {% endblock  %}
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">
+                        {{ message|safe }}
+                        <a href="#" class="close" id="close">x</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <div id="content">
+            {% block content %} {% endblock %}
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+
+        <script>
+            const csrftoken = Cookies.get('csrftoken');
+            document.addEventListener('DOMContentLoaded', (event)=>
+            {
+                // DOM loaded
+                {% block domready %}{% endblock %}
+            })
+        </script>
+    </body>
+</html>
+<script>
+    // close the message bar
+    document.addEventListener('DOMContentLoaded', function(){
+        const closeButtons = document.querySelectorAll('.close');
+        closeButtons.forEach(function(btn){
+            btn.addEventListener('click', function(e){
+                e.preventDefault();
+                btn.parentElement.style.display = 'none';
+            });
+        });
+    });
+</script> {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Gold Bookmarks{% endblock %}</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link href="{% static "css/base.css" %}" rel="stylesheet">
+</head>
+<body>
+     {% if messages %}
+        <div class="messages-container">
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">
+                        {{ message|safe }}
+                        <a href="#" class="close-msg">&times;</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% block content%} {% endblock %}
+
+ <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script>
+        const csrftoken = Cookies.get('csrftoken');
+        
+        // Message close logic
+        document.addEventListener('DOMContentLoaded', function(){
+            const closeButtons = document.querySelectorAll('.close-msg');
+            closeButtons.forEach(function(btn){
+                btn.addEventListener('click', function(e){
+                    e.preventDefault();
+                    // Fade out effect
+                    const item = btn.parentElement;
+                    item.style.opacity = '0';
+                    setTimeout(() => {
+                        item.style.display = 'none';
+                    }, 300);
+                });
+            });
+
+            // Specific page DOM logic
+            {% block domready %}{% endblock %}
+        });
+    </script>
+</body> {% endcomment %}
