@@ -11,6 +11,8 @@ from django.contrib.auth.decorators import login_required
 from .models import Profile, Contact
 from django.contrib import messages
 
+
+
 # # custom user validation 
 # def user_login(request):
 #     if request.method == 'POST':
@@ -74,6 +76,67 @@ def register(request):
 
 @login_required
 def dashboard(request):
+    """
+    Render the dashboard page populated with recent actions performed by users the
+    current user follows.
+
+    This view function performs the following steps in order:
+
+    1. Excludes the current user's own actions from consideration by starting from
+        Action.objects.exclude(user=request.user). This ensures the dashboard does
+        not show actions that the user themselves performed.
+
+    2. Retrieves the IDs of users that the current user is following via
+        request.user.following.values_list('id', flat=True). The attribute
+        `following` is expected to be a related manager (e.g., a ManyToMany or a
+        reverse ForeignKey relation) that yields User (or Profile) instances. The
+        flat=True option returns a plain sequence of IDs.
+
+    3. If the current user follows at least one other user (i.e., `following_ids`
+        is non-empty), the base action queryset is filtered to include only actions
+        whose user_id is in that set. If `following_ids` is empty, no additional
+        filtering is applied and the initial exclusion of the current user remains
+        in effect.
+
+    4. Optimizes ORM access before evaluation by calling:
+        - select_related('user', 'user__profile'): follows SQL JOINs to fetch the
+          foreign-key related User and User.profile objects in the same query,
+          avoiding additional per-row queries when the template accesses attributes
+          like action.user or action.user.profile.
+        - prefetch_related('target'): triggers a separate prefetch query for the
+          'target' relation (commonly used for GenericForeignKey or reverse
+          relations), preventing N+1 query patterns when the template accesses
+          action.target.
+
+    5. Limits the result set to the first ten items via slicing [:10]. Note that
+        the order in which those first ten items are selected depends on the
+        queryset's ordering; if Action has no default ordering defined in its
+        Meta, the slice will be arbitrary unless an explicit order_by(...) is
+        applied elsewhere.
+
+    6. Renders the 'account/dashboard.html' template with a context containing:
+        - 'section': 'dashboard' (a string typically used by the template to mark
+          which navigation section is active)
+        - 'actions': the (evaluated) queryset or list of up to ten Action objects,
+          ready for iteration and display in the template.
+
+    Return value:
+         django.http.HttpResponse -- the rendered dashboard page.
+
+    Notes and assumptions:
+    - This view assumes request.user is an authenticated user (e.g., the view is
+      intended to be decorated with @login_required). If request.user is
+      AnonymousUser, access to request.user.following or other attributes may
+      raise errors.
+    - Because select_related and prefetch_related are used, database access is
+      optimized to reduce N+1 query problems; the exact number of queries depends
+      on the relationships and whether related objects exist.
+    - The current function does not implement pagination beyond a fixed 10-item
+      slice and does not explicitly control ordering; consider adding ordering and
+      a paginated response for larger datasets or better UX.
+    - The function performs no writes to the database and has no side effects
+      beyond executing read queries and rendering a template.
+    """
     # display all actions by default
     actions = Action.objects.exclude(user=request.user)
     following_ids = request.user.following.values_list(
@@ -82,14 +145,14 @@ def dashboard(request):
     )
     if following_ids:
         # if user is following others, retrieve only their actions
-        actions = actions.filter(user_id__in=following_ids)
-    actions=actions.select_related(
+        following_action = actions.filter(user_id__in=following_ids)
+    following_action=actions.select_related(
         'user', 'user__profile'
     ).prefetch_related('target')[:10]
     return render(
         request,
         'account/dashboard.html',
-        {'section': 'dashboard', 'actions': actions}
+        {'section': 'dashboard', 'actions': following_action}
     )
 
 @login_required
@@ -124,6 +187,7 @@ def edit(request):
         profile_form = ProfileEditForm(
             instance=request.user.profile
         )
+        
     return render(
         request,
         'account/edit.html',

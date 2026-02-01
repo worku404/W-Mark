@@ -93,7 +93,28 @@
 
             // Specific page DOM logic
             {% block domready %}{% endblock %}
+            
         });
+    </script>
+    <script>
+        
+  // Password eye toggle (show/hide)
+  const toggleBtn = document.getElementById('passwordToggle');
+  const passwordInput = document.querySelector('.password-wrapper input');
+  const eyeIcon = toggleBtn ? toggleBtn.querySelector('.eye-icon') : null;
+
+  if (toggleBtn && passwordInput) {
+    toggleBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      const isPassword = passwordInput.getAttribute('type') === 'password';
+      passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+
+      // update icon + accessibility label
+      if (eyeIcon) eyeIcon.classList.toggle('show-password', isPassword);
+      toggleBtn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+    });
+  }
     </script>
 </body>
 </html>

@@ -26,6 +26,21 @@ class Profile(models.Model):
 #         Profile.objects.create(user=instance)
         
 class Contact(models.Model):
+    """Represent a one-way "follow" (contact) relationship between two user accounts.
+    Fields:
+        user_from (ForeignKey): The user who initiates the follow (related_name='rel_from_set').
+        user_to (ForeignKey): The user being followed (related_name='rel_to_set').
+        created (DateTimeField): Timestamp when the follow was created (auto_now_add=True).
+    Behavior and notes:
+        - Deleting either user cascades and removes related Contact instances (on_delete=CASCADE).
+        - The model defines an index on '-created' and a default ordering of ['-created'] to optimize
+          queries that retrieve the most recent relationships first.
+        - The relationship is directional; mutual follows require two Contact instances.
+        - __str__ returns a human-readable string in the form '<user_from> follows <user_to>'.
+    Common usage:
+        - Get users a user follows: user.rel_from_set.all()
+        - Get followers of a user: user.rel_to_set.all()
+    """
     user_from = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name='rel_from_set',
