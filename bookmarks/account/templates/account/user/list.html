@@ -31,46 +31,4 @@
             </div>
         {% endfor %}
     </div>
-{% endblock  %} 
-
-
-
-
-{% comment %} {% extends "base.html" %}
-{% load thumbnail %}
-
-{% block title %}People{% endblock %}
-
-{% block content %}
-    <h1>People</h1>
-    
-    <div id="people-list">
-        {% for user in users %}
-            <div class="user">
-                <a href="{{ user.get_absolute_url }}">
-                    {% thumbnail user.profile.photo 180x180 crop="center" as im %}
-                        <img src="{{ im.url }}" alt="{{ user.get_full_name }}">
-                    {% empty %}
-                        <img src="https://ui-avatars.com/api/?name={{ user.username }}&background=random" alt="No Image">
-                    {% endthumbnail %}
-                </a>
-                
-                <div class="info">
-                    <a href="{{ user.get_absolute_url }}" class="title">
-                        {% if user.get_full_name %}
-                            {{ user.get_full_name }}
-                        {% else %}
-                            {{ user.username }}
-                        {% endif %}
-                    </a>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-{% endblock %} {% endcomment %}
-
-
-
-
-
-
+{% endblock  %}
