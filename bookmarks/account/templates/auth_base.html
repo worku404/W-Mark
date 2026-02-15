@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block body_class %}auth-page{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-card">
+        {% block auth_content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

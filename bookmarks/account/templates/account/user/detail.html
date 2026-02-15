@@ -3,11 +3,7 @@
 {% block title %}{{user.get_full_name}}{% endblock %} 
 {% block content %}
 
-
 <h1>{{ user.get_full_name|title }}</h1>
-{% comment %} <div class="profile-info">
-  <img src="{% thumbnail user.profile.photo 180x180 %}" class="user-detail" />
-</div> {% endcomment %}
 
     {% if user.profile.photo %}
       <a href="{{ user.get_absolute_url }}">
