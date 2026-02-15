@@ -1,6 +1,8 @@
 # W-Mark (Bookmarks)
 
 A Django-based bookmarks application with user accounts, social auth, image management, and activity tracking.
+## Preview
+![Gold Bookmarks Dashboard](docs/images/preview.png)
 
 ## Features
 - User registration and authentication
